@@ -71,6 +71,8 @@
     if (window.cordova) {
         document.addEventListener('deviceready', function () {
             app.initialize();
+            StatusBar.overlaysWebView(false);
+            StatusBar.hide();
             window.addEventListener("statusTap", function () {
                 app.navigation.scroll_top(0);
             });

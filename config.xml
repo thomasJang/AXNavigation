@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.leisureq.gajago.test" version="0.0.1" xmlns="http://www.w3.org/ns/widgets">
-    <name>GajagoTest</name>
+    <name>AXNavigation</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>

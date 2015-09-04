@@ -25,6 +25,11 @@ var AXNavigation = (function(){
 			 * aside_right: $("#app-aside-right")
 			 * content_container: $("#app-container")
 			 */
+
+			this.config.navigation_bar.bind("touchstart.axnavigation", function(){
+				_this.scroll_top(0);
+			});
+
 			return this;
 		};
 

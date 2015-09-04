@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div style="padding:20px;">
+    form-sub
+
+    <button type="button" id="form-sub-detail-btn-back">GO BACK</button>
+
+
+    <div style="height:800px;"></div>
+
+</div>
+<script type="text/javascript">
+    var form_sub_detail = {
+        start: function () {
+            $("#form-sub-detail-btn-back").click(function (e) {
+                app.close("sub-02");
+            });
+        },
+        end: function () {
+
+        }
+    }
+</script>
+</body>
+</html>

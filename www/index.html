@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AXNavigation</title>
+
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="js/AXNavigation.js"></script>
+</head>
+<body>
+
+<div class="app-root">
+    <div class="app-navagation-bar" id="app-navagation-bar"></div>
+    <div class="app-aside-left" id="app-aside-left"></div>
+    <div class="app-contents-container" id="app-container"></div>
+    <div class="app-aside-right" id="app-aside-right"></div>
+</div>
+
+<script type="text/javascript">
+    var forms = {
+        "main": {
+            url:"forms/form-main.html",
+            objectName: "form_main",
+            startFunction: "start"
+        },
+        "sub-01": {
+            url:"forms/form-sub.html",
+            objectName: "form_sub",
+            startFunction: "start"
+        },
+        "sub-02": {
+            url:"forms/form-sub-detail.html",
+            objectName: "form_sub_detail",
+            startFunction: "start"
+        }
+    };
+
+    var app = {
+        navigation: new AXNavigation(),
+        initialize: function () {
+            this.navigation.set_config({
+                content_wrapper_class_name: "content-wrapper",
+                navigation_bar: $("#app-navagation-bar"),
+                aside_left: $("#app-aside-left"),
+                aside_right: $("#app-aside-right"),
+                content_container: $("#app-container")
+            });
+
+            this.navigation.open(forms["main"], "_main");
+        },
+        open: function(form_id, target){
+            if(forms[form_id]) {
+                this.navigation.open(forms[form_id], target);
+            }else{
+                alert("form_id에 매치되는 폼 아이템이 없습니다.");
+            }
+        },
+        close: function(form_id){
+            this.navigation.close(forms[form_id]);
+        }
+    };
+
+    if (window.cordova) {
+        document.addEventListener('deviceready', function () {
+            app.initialize();
+            window.addEventListener("statusTap", function () {
+                app.navigation.scroll_top(0);
+            });
+        }, false);
+    } else {
+        $(document.body).ready(function () {
+            app.initialize();
+        });
+    }
+</script>
+
+</body>
+</html>

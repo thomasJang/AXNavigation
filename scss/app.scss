@@ -1,0 +1,103 @@
+@import "bourbon/bourbon";
+
+$depth-navigation: 100;
+$depth-aside: 90;
+
+html, body {
+	-webkit-backface-visibility: hidden;
+	margin: 0px;
+	padding: 0px;
+	font-size: 13px;
+	height: 100%;
+	overflow-x: hidden;
+	@include transition(all 0.3s ease-in-out);
+}
+
+
+@include keyframes(SLIDE_OUT_LEFT) {
+	from {
+		@include transform(translateX(0px));
+	}
+	to {
+		@include transform(translateX(-100%));
+	}
+}
+@include keyframes(SLIDE_IN_LEFT) {
+	from {
+		@include transform(translateX(-100%));
+	}
+	to {
+		@include transform(translateX(0px));
+	}
+}
+@include keyframes(SLIDE_OUT_RIGHT) {
+	from {
+		@include transform(translateX(0px));
+	}
+	to {
+		@include transform(translateX(100%));
+	}
+}
+@include keyframes(SLIDE_IN_RIGHT) {
+	from {
+		@include transform(translateX(100%));
+	}
+	to {
+		@include transform(translateX(0px));
+	}
+}
+
+
+.app-root {
+	position: relative;
+	height: 100%;
+	.app-navagation-bar {
+		position: fixed;
+		left: 0px; top: 0px;
+		width: 100%;
+		height: 44px;
+		z-index: $depth-navigation;
+		background: #ccc;
+	}
+	.app-aside-left {
+		position: absolute;
+	}
+	.app-aside-right {
+		position: absolute;
+	}
+	.app-contents-container {
+		position: relative;
+		height: 100%;
+		.content-wrapper {
+			position: absolute;
+			box-sizing: border-box;
+			padding-top: 44px;
+			height: 100%;
+			width: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+			-webkit-overflow-scrolling: touch;
+
+			&.slide-out-left{
+				@include animation(SLIDE_OUT_LEFT 0.25s $ease-in-out-cubic);
+				@include transform(translateZ(0));
+				@include transform(translateX(-100%));
+			}
+			&.slide-out-right{
+				@include animation(SLIDE_OUT_RIGHT 0.25s $ease-in-out-cubic);
+				@include transform(translateZ(0));
+				@include transform(translateX(100%));
+			}
+			&.slide-in-left{
+				@include animation(SLIDE_IN_LEFT 0.25s $ease-in-out-cubic);
+				@include transform(translateZ(0));
+				@include transform(translateX(0px));
+			}
+			&.slide-in-right{
+				@include animation(SLIDE_IN_RIGHT 0.25s $ease-in-out-cubic);
+				@include transform(translateZ(0));
+				@include transform(translateX(0px));
+			}
+		}
+	}
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div style="padding:20px;">
+
+    <h1>form-sub</h1>
+    <h3>스크롤을 끝까지 내리세요</h3>
+
+    <div style="height:800px;">
+
+    </div>
+
+    <button type="button" id="form-sub-btn-detail">detail</button>
+    <button type="button" id="form-sub-btn-back">GO BACK</button>
+
+</div>
+<script type="text/javascript">
+    var form_sub = {
+        start: function () {
+            $("#form-sub-btn-detail").click(function (e) {
+                app.open("sub-02", "_right");
+            });
+            $("#form-sub-btn-back").click(function (e) {
+                app.close("sub-01");
+            });
+        },
+        end: function () {
+
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<style>
+    .item{
+        border:1px solid #ccc;border-radius: 5px;margin: 5px;
+        padding: 15px;
+    }
+    .item:active{
+        background: #bce8f1;
+    }
+</style>
+
+
+form-main
+
+<div class="item" data-item-index="1">1</div>
+<div class="item" data-item-index="1">2</div>
+<div class="item" data-item-index="1">3</div>
+<div class="item" data-item-index="1">4</div>
+<div class="item" data-item-index="1">5</div>
+<div class="item" data-item-index="1">6</div>
+<div class="item" data-item-index="1">7</div>
+<div class="item" data-item-index="1">8</div>
+<div class="item" data-item-index="1">9</div>
+<div class="item" data-item-index="1">1</div>
+<div class="item" data-item-index="1">2</div>
+<div class="item" data-item-index="1">3</div>
+<div class="item" data-item-index="1">4</div>
+<div class="item" data-item-index="1">5</div>
+<div class="item" data-item-index="1">6</div>
+<div class="item" data-item-index="1">7</div>
+<div class="item" data-item-index="1">8</div>
+<div class="item" data-item-index="1">9</div>
+<div class="item" data-item-index="1">1</div>
+<div class="item" data-item-index="1">2</div>
+<div class="item" data-item-index="1">3</div>
+<div class="item" data-item-index="1">4</div>
+<div class="item" data-item-index="1">5</div>
+<div class="item" data-item-index="1">6</div>
+<div class="item" data-item-index="1">7</div>
+<div class="item" data-item-index="1">8</div>
+<div class="item" data-item-index="1">9</div>
+<div class="item" data-item-index="1">1</div>
+<div class="item" data-item-index="1">2</div>
+<div class="item" data-item-index="1">3</div>
+<div class="item" data-item-index="1">4</div>
+<div class="item" data-item-index="1">5</div>
+<div class="item" data-item-index="1">6</div>
+<div class="item" data-item-index="1">7</div>
+<div class="item" data-item-index="1">8</div>
+<div class="item" data-item-index="1">9</div>
+<div class="item" data-item-index="1">1</div>
+<div class="item" data-item-index="1">2</div>
+<div class="item" data-item-index="1">3</div>
+<div class="item" data-item-index="1">4</div>
+<div class="item" data-item-index="1">5</div>
+<div class="item" data-item-index="1">6</div>
+<div class="item" data-item-index="1">7</div>
+<div class="item" data-item-index="1">8</div>
+<div class="item" data-item-index="1">9</div>
+<div class="item" data-item-index="1">1</div>
+<div class="item" data-item-index="1">2</div>
+<div class="item" data-item-index="1">3</div>
+<div class="item" data-item-index="1">4</div>
+<div class="item" data-item-index="1">5</div>
+<div class="item" data-item-index="1">6</div>
+<div class="item" data-item-index="1">7</div>
+<div class="item" data-item-index="1">8</div>
+<div class="item" data-item-index="1">9</div>
+
+<div style="clear:both;"></div>
+
+<script type="text/javascript">
+    var form_main = {
+        start: function(){
+            $(".item").click(function(e){
+                var index = e.target.getAttribute("data-item-index");
+                //alert(index);
+                app.open("sub-01", "_right");
+            });
+        },
+        end: function(){
+
+        }
+    }
+</script>

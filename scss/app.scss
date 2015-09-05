@@ -1,7 +1,11 @@
 @import "bourbon/bourbon";
+@import "utilities";
+
 
 $depth-navigation: 100;
-$depth-aside: 90;
+$depth-content: 90;
+$depth-aside: 80;
+
 
 html, body {
 	-webkit-backface-visibility: hidden;
@@ -11,8 +15,8 @@ html, body {
 	height: 100%;
 	overflow-x: hidden;
 	@include transition(all 0.3s ease-in-out);
+	background: #F1F1F1;
 }
-
 
 @include keyframes(SLIDE_OUT_LEFT) {
 	from {
@@ -48,26 +52,106 @@ html, body {
 }
 
 
+
+
+.flex-flow-column {
+	@include display(flex);
+	@include align-items(stretch);
+	@include flex-direction(column);
+	@include justify-content(space-between);
+
+	.block {
+		@include flex(1);
+		&.none-flex {
+			@include flex(none);
+		}
+		//@include order(1);
+	}
+}
+.flex-flow-row {
+	@include display(flex);
+	@include align-items(center);
+	@include flex-direction(row);
+	@include justify-content(space-between);
+
+	flex-wrap: nowrap;
+	.item {
+		@include flex(1);
+		&.none-flex {
+			@include flex(none);
+		}
+		//@include order(1);
+	}
+}
+
 .app-root {
 	position: relative;
 	height: 100%;
+
 	.app-navagation-bar {
 		position: fixed;
-		left: 0px; top: 0px;
+		left: 0px;
+		top: 0px;
+
+		box-sizing: border-box;
 		width: 100%;
 		height: 44px;
+		padding: 0px 5px;
 		z-index: $depth-navigation;
-		background: #ccc;
+		background: #0088BF;
+		text-align: center;
+
+		.bar-wrapper{
+			margin-top:6px;
+			position: relative;
+		}
+
+		.bar-title {
+			position: absolute;
+			left:0px;
+			top:0px;
+			width: 100%;
+			text-align: center;
+			font-size: 18px;
+			color: #FFFFFF;
+			line-height: 21px;
+			padding: 6px 0px;
+		}
+		.bar-addon {
+			display: block;
+			color: #FFCB08;
+			font-size: 21px;
+			line-height: 21px;
+			padding: 5px;
+
+			&.left {
+				float: left;
+			}
+			&.right {
+				float: right;
+			}
+		}
 	}
 	.app-aside-left {
 		position: absolute;
+		left:0px;
+		top:0px;
+		height: 100%;
+		width: 200px;
+		z-index: $depth-aside;
 	}
 	.app-aside-right {
 		position: absolute;
+		left:0px;
+		top:0px;
+		height: 100%;
+		width: 200px;
+		z-index: $depth-aside;
 	}
 	.app-contents-container {
 		position: relative;
 		height: 100%;
+		z-index: $depth-content;
 		.content-wrapper {
 			position: absolute;
 			box-sizing: border-box;
@@ -78,26 +162,38 @@ html, body {
 			overflow-x: hidden;
 			-webkit-overflow-scrolling: touch;
 
-			&.slide-out-left{
+			&.slide-out-left {
 				@include animation(SLIDE_OUT_LEFT 0.25s $ease-in-out-cubic);
 				@include transform(translateZ(0));
 				@include transform(translateX(-100%));
 			}
-			&.slide-out-right{
+			&.slide-out-right {
 				@include animation(SLIDE_OUT_RIGHT 0.25s $ease-in-out-cubic);
 				@include transform(translateZ(0));
 				@include transform(translateX(100%));
 			}
-			&.slide-in-left{
+			&.slide-in-left {
 				@include animation(SLIDE_IN_LEFT 0.25s $ease-in-out-cubic);
 				@include transform(translateZ(0));
 				@include transform(translateX(0px));
 			}
-			&.slide-in-right{
+			&.slide-in-right {
 				@include animation(SLIDE_IN_RIGHT 0.25s $ease-in-out-cubic);
 				@include transform(translateZ(0));
 				@include transform(translateX(0px));
 			}
+		}
+		.open-aside-left{
+
+		}
+		.close-aside-left{
+
+		}
+		.open-aside-right{
+
+		}
+		.close-aside-right{
+
 		}
 	}
 }

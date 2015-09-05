@@ -1,10 +1,13 @@
 @import "bourbon/bourbon";
 @import "utilities";
 
-
+$depth-content-mask: 110;
 $depth-navigation: 100;
 $depth-content: 90;
 $depth-aside: 80;
+
+$left-aside-width: 260px;
+$right-aside-width: 260px;
 
 
 html, body {
@@ -51,7 +54,38 @@ html, body {
 	}
 }
 
-
+@include keyframes(OPEN_ASIDE_LEFT) {
+	from {
+		@include transform(translateX(0px));
+	}
+	to {
+		@include transform(translateX($left-aside-width));
+	}
+}
+@include keyframes(CLOSE_ASIDE_LEFT) {
+	from {
+		@include transform(translateX($left-aside-width));
+	}
+	to {
+		@include transform(translateX(0px));
+	}
+}
+@include keyframes(OPEN_ASIDE_RIGHT) {
+	from {
+		@include transform(translateX(0px));
+	}
+	to {
+		@include transform(translateX(-$right-aside-width));
+	}
+}
+@include keyframes(CLOSE_ASIDE_RIGHT) {
+	from {
+		@include transform(translateX(-$right-aside-width));
+	}
+	to {
+		@include transform(translateX(0px));
+	}
+}
 
 
 .flex-flow-column {
@@ -84,6 +118,42 @@ html, body {
 	}
 }
 
+@mixin aside-events(){
+	&.open-aside-left{
+		@include animation(OPEN_ASIDE_LEFT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX($left-aside-width));
+	}
+	&.close-aside-left{
+		@include animation(CLOSE_ASIDE_LEFT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(0px));
+	}
+	&.open-aside-right{
+		@include animation(OPEN_ASIDE_RIGHT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(-$right-aside-width));
+	}
+	&.close-aside-right{
+		@include animation(CLOSE_ASIDE_RIGHT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(0px));
+	}
+}
+
+.app-content-mask{
+	//@include transition(all 0.5s);
+	//background: #000;
+	//opacity: 0.1;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	height: 100%;
+	width: 100%;
+	z-index: $depth-content-mask;
+	@include aside-events();
+}
+
 .app-root {
 	position: relative;
 	height: 100%;
@@ -105,9 +175,9 @@ html, body {
 			margin-top:6px;
 			position: relative;
 		}
-
 		.bar-title {
 			position: absolute;
+			z-index: 1;
 			left:0px;
 			top:0px;
 			width: 100%;
@@ -118,6 +188,8 @@ html, body {
 			padding: 6px 0px;
 		}
 		.bar-addon {
+			position: relative;
+			z-index: 2;
 			display: block;
 			color: #FFCB08;
 			font-size: 21px;
@@ -131,13 +203,15 @@ html, body {
 				float: right;
 			}
 		}
+
+		@include aside-events();
 	}
 	.app-aside-left {
 		position: absolute;
 		left:0px;
 		top:0px;
 		height: 100%;
-		width: 200px;
+		width: $left-aside-width;
 		z-index: $depth-aside;
 	}
 	.app-aside-right {
@@ -145,13 +219,15 @@ html, body {
 		left:0px;
 		top:0px;
 		height: 100%;
-		width: 200px;
+		width: $right-aside-width;
 		z-index: $depth-aside;
 	}
 	.app-contents-container {
 		position: relative;
 		height: 100%;
 		z-index: $depth-content;
+		background: #F1F1F1;
+		box-shadow: 0px 0px 10px #888;
 		.content-wrapper {
 			position: absolute;
 			box-sizing: border-box;
@@ -183,17 +259,6 @@ html, body {
 				@include transform(translateX(0px));
 			}
 		}
-		.open-aside-left{
-
-		}
-		.close-aside-left{
-
-		}
-		.open-aside-right{
-
-		}
-		.close-aside-right{
-
-		}
+		@include aside-events();
 	}
 }

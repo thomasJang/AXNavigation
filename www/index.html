@@ -19,7 +19,9 @@
 <body>
 
 <div class="app-root">
-    <div class="app-navagation-bar" id="app-navagation-bar">
+    <div class="app-navagation-bar" id="app-navagation-bar"></div>
+    <div class="app-aside-left" id="app-aside-left">
+
         <div class="header">
             메뉴
         </div>
@@ -33,8 +35,8 @@
                 </li>
             </ul>
         </div>
+
     </div>
-    <div class="app-aside-left" id="app-aside-left"></div>
     <div class="app-contents-container" id="app-container"></div>
     <div class="app-aside-right" id="app-aside-right"></div>
 </div>
@@ -45,8 +47,12 @@
             header: {
                 title: "메인",
                 addon: [
-                    {type:"left", html: '<i class="icon-dp-menu"></i>', onclick: ""},
-                    {type:"right", html: '<i class="icon-dp-more"></i>', onclick: ""}
+                    {type:"left", html: '<i class="icon-dp-menu"></i>', onclick: function(){
+                        app.navigation.open_aside("aside_left");
+                    }},
+                    {type:"right", html: '<i class="icon-dp-more"></i>', onclick: function(){
+                        app.navigation.open_aside("aside_right");
+                    }}
                 ]
             },
             url: "forms/form-main.html",

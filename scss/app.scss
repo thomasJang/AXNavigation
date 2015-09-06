@@ -9,7 +9,8 @@ $depth-aside: 80;
 
 $left-aside-width: 260px;
 $right-aside-width: 260px;
-
+$tool-bar-height: 44px;
+$tab-bar-height: 50px;
 
 html, body {
 	-webkit-backface-visibility: hidden;
@@ -20,6 +21,7 @@ html, body {
 	overflow-x: hidden;
 	@include transition(all 0.3s ease-in-out);
 	background: #F1F1F1;
+	overflow: hidden;
 }
 
 @include keyframes(SLIDE_OUT_LEFT) {
@@ -52,6 +54,23 @@ html, body {
 	}
 	to {
 		@include transform(translateX(0px));
+	}
+}
+
+@include keyframes(SLIDE_OUT_DOWN) {
+	from {
+		@include transform(translateY(0px));
+	}
+	to {
+		@include transform(translateY($tab-bar-height));
+	}
+}
+@include keyframes(SLIDE_IN_UP) {
+	from {
+		@include transform(translateY($tab-bar-height));
+	}
+	to {
+		@include transform(translateY(0px));
 	}
 }
 
@@ -206,7 +225,7 @@ html, body {
 
 		box-sizing: border-box;
 		width: 100%;
-		height: 44px;
+		height: $tool-bar-height;
 		padding: 0px 5px;
 		z-index: $depth-too-bar;
 		background: #0088BF;
@@ -214,9 +233,11 @@ html, body {
 
 		.bar-wrapper{
 			position: absolute;
-			top: 6px;
+			top: 0px;
 			left: 0px;
 			width: 100%;
+			box-sizing: border-box;
+			padding: 0px 0px;
 			&.fadeOut{
 				@include animation(FADE_OUT 0.25s $ease-in-out-cubic);
 				@include opacity(0.0);
@@ -227,9 +248,9 @@ html, body {
 			@include transition(all 0.25s);
 			@include animation(FADE_IN 0.25s $ease-in-out-cubic);
 			position: absolute;
-			z-index: 1;
+			z-index: 0;
 			left:0px;
-			top:0px;
+			top:6px;
 			width: 100%;
 			text-align: center;
 			font-size: 18px;
@@ -241,12 +262,13 @@ html, body {
 			@include transition(all 0.25s);
 			@include animation(FADE_IN 0.25s $ease-in-out-cubic);
 			position: relative;
-			z-index: 2;
+			z-index: 10;
 			display: block;
 			color: #FFCB08;
 			font-size: 21px;
 			line-height: 21px;
-			padding: 5px;
+			height:24px;
+			padding: 10px;
 
 			&.left {
 				float: left;
@@ -283,31 +305,40 @@ html, body {
 		@include aside-events();
 	}
 	.app-aside-left {
+		display: none;
 		position: absolute;
 		left:0px;
 		top:0px;
 		height: 100%;
 		width: $left-aside-width;
 		z-index: $depth-aside;
+		background: #6a6b77;
+		color:#fff;
+		a{color:#fff;}
 	}
 	.app-aside-right {
+		display: none;
 		position: absolute;
-		left:0px;
+		right:0px;
 		top:0px;
 		height: 100%;
 		width: $right-aside-width;
 		z-index: $depth-aside;
+		background: #6a6b77;
+		color:#fff;
+		a{color:#fff;}
 	}
 	.app-contents-container {
 		position: relative;
 		height: 100%;
 		z-index: $depth-content;
 		background: #F1F1F1;
-		box-shadow: 0px 0px 10px #888;
+		box-shadow: 0px 0px 10px #000;
 		.content-wrapper {
 			position: absolute;
 			box-sizing: border-box;
-			padding-top: 44px;
+			padding-top: $tool-bar-height;
+			padding-bottom: $tab-bar-height;
 			height: 100%;
 			width: 100%;
 			overflow-y: auto;
@@ -316,5 +347,73 @@ html, body {
 			@include slide-events();
 		}
 		@include aside-events();
+	}
+
+	.app-tab-bar{
+		position: fixed;
+		bottom: 0px;
+		left:0px;
+		width: 100%;
+		height: $tab-bar-height;
+		z-index: $depth-tab-bar;
+
+		&.slide-out-down {
+			@include animation(SLIDE_OUT_DOWN 0.25s $ease-in-out-cubic);
+			@include transform(translateZ(0));
+			@include transform(translateY($tab-bar-height));
+		}
+		&.slide-in-up {
+			@include animation(SLIDE_IN_UP 0.25s $ease-in-out-cubic);
+			@include transform(translateZ(0));
+			@include transform(translateY(0));
+		}
+
+		/* Bar: */
+		background: #FFFFFF;
+
+		@include display(flex);
+		@include align-items(center);
+		@include flex-direction(row);
+		@include justify-content(space-between);
+
+		flex-wrap: nowrap;
+		.tab-item{
+			text-align: center;
+			@include flex(1);
+			i{
+				display: block;
+				font-size: 21px;
+				color: #A1A1A1;
+			}
+			.item-label{
+				display: block;
+				margin-top:5px;
+				/* 오늘: */
+				font-size: 9.61px;
+				color: #A1A1A1;
+				letter-spacing: 0.2px;
+				line-height: 12px;
+			}
+			&.on{
+				color: #219ECF;
+				i{
+					color: #219ECF;
+				}
+				.item-label{
+					color: #219ECF;
+				}
+			}
+			&.plus{
+				i{
+					width:40px;height:40px;
+					margin:auto;
+					border-radius: 50%;
+					/* Oval 8: */
+					background: #FFCB08;
+					color: #fff;
+					line-height: 40px;
+				}
+			}
+		}
 	}
 }

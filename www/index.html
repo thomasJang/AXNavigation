@@ -39,10 +39,53 @@
     </div>
     <div class="app-contents-container" id="app-container"></div>
     <div class="app-aside-right" id="app-aside-right"></div>
-    <div class="app-tab-bar" id="app-tab-bar"></div>
+
+    <div class="app-tab-bar" id="app-tab-bar">
+        <div class="tab-item on" data-tab-item="today">
+            <i class="icon-dp-logo-outline item-icon"></i>
+            <spam class="item-label">오늘</spam>
+        </div>
+        <div class="tab-item" data-tab-item="canelder">
+            <i class="icon-dp-calendar item-icon"></i>
+            <spam class="item-label">달력</spam>
+        </div>
+        <div class="tab-item plus" data-tab-item="plus">
+            <i class="icon-dp-plus item-icon"></i>
+        </div>
+        <div class="tab-item" data-tab-item="search">
+            <i class="icon-dp-search item-icon"></i>
+            <spam class="item-label">검색</spam>
+        </div>
+        <div class="tab-item" data-tab-item="config">
+            <i class="icon-dp-config item-icon"></i>
+            <spam class="item-label">설정</spam>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
+    var e_click = ('ontouchstart' in window) ? "touchstart" : "click";
+    function get_event_target(target, cond) {
+        var _target = target;
+        if (_target) {
+            while ((function () {
+                var result = true;
+                if (cond) {
+                    result = cond(_target);
+                }
+                return !result;
+            })()) {
+                if (_target.parentNode) {
+                    _target = _target.parentNode;
+                } else {
+                    _target = false;
+                    break;
+                }
+            }
+        }
+        return _target;
+    }
+
     var forms = {
         "main": {
             header: {
@@ -58,6 +101,19 @@
             },
             url: "forms/form-main.html",
             objectName: "form_main",
+            startFunction: "start"
+        },
+        "main-1": {
+            header: {
+                title: "메인 1",
+                addon: [
+                    {type:"left", html: '<i class="icon-dp-menu"></i>', onclick: function(){
+                        app.navigation.open_aside("aside_left");
+                    }}
+                ]
+            },
+            url: "forms/form-main-1.html",
+            objectName: "form_main_1",
             startFunction: "start"
         },
         "sub-01": {
@@ -90,10 +146,21 @@
                 tool_bar: $("#app-tool-bar"),
                 aside_left: $("#app-aside-left"),
                 aside_right: $("#app-aside-right"),
-                content_container: $("#app-container")
+                content_container: $("#app-container"),
+                tab_bar: $("#app-tab-bar"),
+                on_event: function(that){
+                    if(that.action == "open_aside"){
+                        if(window.StatusBar) StatusBar.backgroundColorByHexString("#000000");
+                    }
+                    else if(that.action == "close_aside"){
+                        if(window.StatusBar) StatusBar.backgroundColorByHexString("#0088BF");
+                    }
+                }
             });
 
             this.navigation.open(forms["main"], "_main");
+
+            this.tab_bar.init();
         },
         open: function (form_id, target) {
             if (forms[form_id]) {
@@ -104,6 +171,39 @@
         },
         close: function (form_id) {
             this.navigation.close(forms[form_id]);
+        },
+        tab_bar: {
+            select_item_name: "today",
+            items: [],
+            init: function(){
+                this.items = $("#app-tab-bar").find('[data-tab-item]');
+                this.items.bind(e_click, function(e){
+                    var target = get_event_target(e.target, function (el) {
+                        return (el.getAttribute("data-tab-item") != null);
+                    });
+                    if (target) {
+                        app.tab_bar.click(target.getAttribute("data-tab-item"))
+                    }
+                });
+            },
+            click: function(item_name){
+                if(this.select_item_name == item_name) return false;
+
+                this.select_item_name = item_name;
+                this.items.each(function(n) {
+                    $(this).removeClass("on");
+                    if(this.getAttribute("data-tab-item") == item_name){
+                        $(this).addClass("on");
+                    }
+                });
+
+                if(item_name == "today"){
+                    app.navigation.open(forms["main"], "_main");
+                }
+                else if(item_name == "canelder"){
+                    app.navigation.open(forms["main-1"], "_main");
+                }
+            }
         }
     };
 

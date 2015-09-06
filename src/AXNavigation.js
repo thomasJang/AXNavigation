@@ -47,14 +47,14 @@ var AXNavigation = (function () {
 			/**
 			 * this.config.
 			 * content_wrapper_class_name : "content-wrapper"
-			 * navigation_bar: $("#app-navagation-bar")
+			 * tool_bar: $("#app-tool-bar")
 			 * aside_left: $("#app-aside-left")
 			 * aside_right: $("#app-aside-right")
 			 * content_container: $("#app-container")
 			 */
 
 			/*
-			 this.config.navigation_bar.bind("touchstart.axnavigation", function(){
+			 this.config.tool_bar.bind("touchstart.axnavigation", function(){
 			 _this.scroll_top(0);
 			 });
 			 */
@@ -87,13 +87,13 @@ var AXNavigation = (function () {
 			po.push('</div>');
 
 			if(this.content_stack.length < 2) {
-				//cfg.navigation_bar.find(".bar-wrapper").addClass("fadeOut");
-				cfg.navigation_bar.html(po.join(''));
-				header_jdom = cfg.navigation_bar.find('#axn-navigation-' + form.objectName);
+				//cfg.tool_bar.find(".bar-wrapper").addClass("fadeOut");
+				cfg.tool_bar.html(po.join(''));
+				header_jdom = cfg.tool_bar.find('#axn-navigation-' + form.objectName);
 			}else{
 				this.content_stack[this.content_stack.length-2].header_jdom.removeClass("slide-in-right").addClass("slide-out-left");
-				cfg.navigation_bar.append(po.join(''));
-				header_jdom = cfg.navigation_bar.find('#axn-navigation-' + form.objectName);
+				cfg.tool_bar.append(po.join(''));
+				header_jdom = cfg.tool_bar.find('#axn-navigation-' + form.objectName);
 				header_jdom.addClass("slide-in-right")
 			}
 
@@ -164,7 +164,7 @@ var AXNavigation = (function () {
 					form: form,
 					jdom: jdom
 				});
-				// make navigation_bar
+				// make tool_bar
 				if (form.header) {
 					// after push content_stack
 					this.open_header(form);
@@ -191,7 +191,7 @@ var AXNavigation = (function () {
 
 				this.position = position;
 
-				// make navigation_bar
+				// make tool_bar
 				if (form.header) {
 					// after push content_stack
 					this.open_header(form);
@@ -253,7 +253,7 @@ var AXNavigation = (function () {
 			this.aside_opend = true;
 			this.app_mask = $('<div class="app-content-mask"></div>')
 			if (type == "aside_left") {
-				cfg.navigation_bar.addClass("open-aside-left");
+				cfg.tool_bar.addClass("open-aside-left");
 				cfg.content_container.addClass("open-aside-left");
 				$(document.body).append(this.app_mask);
 				this.app_mask.addClass("open-aside-left");
@@ -265,7 +265,7 @@ var AXNavigation = (function () {
 				});
 			}
 			else if (type == "aside_right") {
-				cfg.navigation_bar.addClass("open-aside-right");
+				cfg.tool_bar.addClass("open-aside-right");
 				cfg.content_container.addClass("open-aside-right");
 
 				$(document.body).append(this.app_mask);
@@ -281,23 +281,23 @@ var AXNavigation = (function () {
 
 		this.close_aside = function (type) {
 
-			cfg.navigation_bar.removeClass("open-aside-left").removeClass("open-aside-right");
+			cfg.tool_bar.removeClass("open-aside-left").removeClass("open-aside-right");
 			cfg.content_container.removeClass("open-aside-left").removeClass("open-aside-right");
 
 			if (type == "aside_left") {
-				cfg.navigation_bar.addClass("close-aside-left");
+				cfg.tool_bar.addClass("close-aside-left");
 				cfg.content_container.addClass("close-aside-left");
 				this.app_mask.removeClass("open-aside-left").addClass("close-aside-left");
 			}
 			else if (type == "aside_right") {
-				cfg.navigation_bar.addClass("close-aside-right");
+				cfg.tool_bar.addClass("close-aside-right");
 				cfg.content_container.addClass("close-aside-right");
 				this.app_mask.removeClass("open-aside-right").addClass("close-aside-right");
 			}
 
 			setTimeout((function () {
 				this.app_mask.remove();
-				cfg.navigation_bar.removeClass("close-aside-left").removeClass("close-aside-right");
+				cfg.tool_bar.removeClass("close-aside-left").removeClass("close-aside-right");
 				cfg.content_container.removeClass("close-aside-left").removeClass("close-aside-right");
 				this.aside_opend = false;
 			}).bind(this), cfg.animateTime);

@@ -2,7 +2,8 @@
 @import "utilities";
 
 $depth-content-mask: 110;
-$depth-navigation: 100;
+$depth-too-bar: 100;
+$depth-tab-bar: 100;
 $depth-content: 90;
 $depth-aside: 80;
 
@@ -198,7 +199,7 @@ html, body {
 	position: relative;
 	height: 100%;
 
-	.app-navagation-bar {
+	.app-tool-bar {
 		position: fixed;
 		left: 0px;
 		top: 0px;
@@ -207,7 +208,7 @@ html, body {
 		width: 100%;
 		height: 44px;
 		padding: 0px 5px;
-		z-index: $depth-navigation;
+		z-index: $depth-too-bar;
 		background: #0088BF;
 		text-align: center;
 

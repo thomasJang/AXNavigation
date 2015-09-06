@@ -27,7 +27,10 @@ var AXNavigation = (function () {
 
 		(function () {
 			this.config = {
-				animateTime: 300
+				animateTime: 300,
+				addon_back: {
+					html: '<i class="icon-dp-back"></i>'
+				}
 			};
 			this.isCordova = (window.cordova) ? true : false;
 		}).apply(this, arguments);
@@ -59,6 +62,75 @@ var AXNavigation = (function () {
 			return this;
 		};
 
+		this.open_header = function (form) {
+			var header_jdom;
+			var po = [];
+			po.push('<div class="bar-wrapper" id="axn-navigation-' + form.objectName + '">');
+
+			if (form.header.title) {
+				po.push('<div class="bar-title">' + form.header.title + '</div>');
+			}
+
+			if(this.content_stack.length > 1) {
+				po.push('<div class="bar-addon left" data-header-btn="back">' + cfg.addon_back.html
+					+ '<span class="label">' + this.content_stack[this.content_stack.length-2].form.header.title + '</span>'
+					+ '</div>');
+			}
+
+			if (form.header.addon) {
+				for (var i = 0, l = form.header.addon.length, addon; i < l; i++) {
+					addon = form.header.addon[i];
+					po.push('<div class="bar-addon ' + addon.type + '" data-header-btn="' + i + '">' + addon.html + '</div>');
+				}
+			}
+			po.push('<div style="clear: both;"></div>');
+			po.push('</div>');
+
+			if(this.content_stack.length < 2) {
+				//cfg.navigation_bar.find(".bar-wrapper").addClass("fadeOut");
+				cfg.navigation_bar.html(po.join(''));
+				header_jdom = cfg.navigation_bar.find('#axn-navigation-' + form.objectName);
+			}else{
+				this.content_stack[this.content_stack.length-2].header_jdom.removeClass("slide-in-right").addClass("slide-out-left");
+				cfg.navigation_bar.append(po.join(''));
+				header_jdom = cfg.navigation_bar.find('#axn-navigation-' + form.objectName);
+				header_jdom.addClass("slide-in-right")
+			}
+
+			var stack = this.content_stack[this.content_stack.length-1];
+			stack.header_jdom = header_jdom;
+			stack.header_jdom
+				.find('[data-header-btn]')
+				.bind(e_click, function (e) {
+				var target = get_event_target(e.target, function (el) {
+					return (el.getAttribute("data-header-btn") != null);
+				});
+				if (target && !_this.aside_opend) {
+					var addon_index = target.getAttribute("data-header-btn");
+					if(addon_index == "back"){
+						var that = {
+							form: form
+						}
+						if(cfg.addon_back.onclick) cfg.addon_back.onclick.call(that,  that);
+						else {
+							_this.close(form);
+						}
+					}
+					else{
+						if (form.header.addon[addon_index].onclick) {
+							var that = {
+								form: form,
+								item: form.header.addon[addon_index]
+							};
+							form.header.addon[addon_index].onclick.call(that, that);
+						}
+					}
+					return false;
+				}
+			});
+
+		};
+
 		//
 		this.open = function (form, target, option) {
 			if (this.animating) return this;
@@ -75,40 +147,6 @@ var AXNavigation = (function () {
 
 			if (target == "_main") {
 
-				// make navigation_bar
-				if (form.header) {
-					(function () {
-						var po = [];
-						po.push('<div class="bar-wrapper" id="axn-navigation-' + form.objectName + '">');
-						if (form.header.title) {
-							po.push('<div class="bar-title">' + form.header.title + '</div>');
-						}
-						if (form.header.addon) {
-							for (var i = 0, l = form.header.addon.length, addon; i < l; i++) {
-								addon = form.header.addon[i];
-								po.push('<div class="bar-addon ' + addon.type + '" data-header-btn="' + i + '">' + addon.html + '</div>');
-							}
-						}
-						po.push('</div>');
-						cfg.navigation_bar.html(po.join(''));
-
-						cfg.navigation_bar.find('[data-header-btn]').bind(e_click, function (e) {
-							var target = get_event_target(e.target, function (el) {
-								return (el.getAttribute("data-header-btn") != null);
-							});
-							if (target && !_this.aside_opend) {
-								if (form.header.addon[target.getAttribute("data-header-btn")].onclick) {
-									var that = {
-										form: form,
-										item: form.header.addon[target.getAttribute("data-header-btn")]
-									};
-									form.header.addon[target.getAttribute("data-header-btn")].onclick.call(that, that);
-								}
-							}
-						});
-					}).call(this);
-				}
-
 				cfg.content_container.empty();
 				cfg.content_container.append(div);
 				jdom = cfg.content_container.find("#axn-content-" + form.objectName);
@@ -124,9 +162,13 @@ var AXNavigation = (function () {
 				this.content_stack = [];
 				this.content_stack.push({
 					form: form,
-					jdom: jdom,
-					navigation_jdom: cfg.content_container.find("#axn-navigation-" + form.objectName)
+					jdom: jdom
 				});
+				// make navigation_bar
+				if (form.header) {
+					// after push content_stack
+					this.open_header(form);
+				}
 
 				$.get(form.url, function (data) {
 					jdom.append(data);
@@ -148,6 +190,13 @@ var AXNavigation = (function () {
 				this.content_stack[this.content_stack.length - 1].jdom.addClass("slide-in-right");
 
 				this.position = position;
+
+				// make navigation_bar
+				if (form.header) {
+					// after push content_stack
+					this.open_header(form);
+				}
+
 				$.get(form.url, function (data) {
 					jdom.append(data);
 					if (window[form.objectName]) {
@@ -171,9 +220,14 @@ var AXNavigation = (function () {
 			this.content_stack[this.content_stack.length - 2].jdom.show().removeClass("slide-out-left").addClass("slide-in-left");
 			this.content_stack[this.content_stack.length - 1].jdom.removeClass("slide-in-right").addClass("slide-out-right");
 
+			this.content_stack[this.content_stack.length - 2].header_jdom.show().removeClass("slide-out-left").addClass("slide-in-left");
+			this.content_stack[this.content_stack.length - 1].header_jdom.removeClass("slide-in-right").addClass("slide-out-right");
+
 			setTimeout((function () {
 				this.content_stack[this.content_stack.length - 2].jdom.removeClass("slide-in-left");
 				this.content_stack[this.content_stack.length - 1].jdom.remove();
+				this.content_stack[this.content_stack.length - 2].header_jdom.removeClass("slide-in-left");
+				this.content_stack[this.content_stack.length - 1].header_jdom.remove();
 				this.content_stack.pop();
 
 				if (window[form.objectName]) {
@@ -203,7 +257,7 @@ var AXNavigation = (function () {
 				cfg.content_container.addClass("open-aside-left");
 				$(document.body).append(this.app_mask);
 				this.app_mask.addClass("open-aside-left");
-				this.app_mask.bind(e_click, function(e){
+				this.app_mask.bind(e_click, function (e) {
 					_this.close_aside("aside_left");
 					e.preventDefault();
 					e.stopPropagation();
@@ -216,7 +270,7 @@ var AXNavigation = (function () {
 
 				$(document.body).append(this.app_mask);
 				this.app_mask.addClass("open-aside-right");
-				this.app_mask.bind(e_click, function(e){
+				this.app_mask.bind(e_click, function (e) {
 					_this.close_aside("aside_right");
 					e.preventDefault();
 					e.stopPropagation();
@@ -225,7 +279,7 @@ var AXNavigation = (function () {
 			}
 		};
 
-		this.close_aside = function(type){
+		this.close_aside = function (type) {
 
 			cfg.navigation_bar.removeClass("open-aside-left").removeClass("open-aside-right");
 			cfg.content_container.removeClass("open-aside-left").removeClass("open-aside-right");

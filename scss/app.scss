@@ -87,6 +87,23 @@ html, body {
 	}
 }
 
+@include keyframes(FADE_IN){
+	from {
+		@include opacity(0.1);
+	}
+	to {
+		@include opacity(1);
+	}
+}
+@include keyframes(FADE_OUT){
+	from {
+		@include opacity(1);
+	}
+	to {
+		@include opacity(0.0);
+		display: none;
+	}
+}
 
 .flex-flow-column {
 	@include display(flex);
@@ -141,6 +158,29 @@ html, body {
 	}
 }
 
+@mixin slide-events(){
+	&.slide-out-left {
+		@include animation(SLIDE_OUT_LEFT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(-100%));
+	}
+	&.slide-out-right {
+		@include animation(SLIDE_OUT_RIGHT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(100%));
+	}
+	&.slide-in-left {
+		@include animation(SLIDE_IN_LEFT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(0px));
+	}
+	&.slide-in-right {
+		@include animation(SLIDE_IN_RIGHT 0.25s $ease-in-out-cubic);
+		@include transform(translateZ(0));
+		@include transform(translateX(0px));
+	}
+}
+
 .app-content-mask{
 	//@include transition(all 0.5s);
 	//background: #000;
@@ -172,10 +212,19 @@ html, body {
 		text-align: center;
 
 		.bar-wrapper{
-			margin-top:6px;
-			position: relative;
+			position: absolute;
+			top: 6px;
+			left: 0px;
+			width: 100%;
+			&.fadeOut{
+				@include animation(FADE_OUT 0.25s $ease-in-out-cubic);
+				@include opacity(0.0);
+			}
+			@include slide-events();
 		}
 		.bar-title {
+			@include transition(all 0.25s);
+			@include animation(FADE_IN 0.25s $ease-in-out-cubic);
 			position: absolute;
 			z-index: 1;
 			left:0px;
@@ -188,6 +237,8 @@ html, body {
 			padding: 6px 0px;
 		}
 		.bar-addon {
+			@include transition(all 0.25s);
+			@include animation(FADE_IN 0.25s $ease-in-out-cubic);
 			position: relative;
 			z-index: 2;
 			display: block;
@@ -202,6 +253,30 @@ html, body {
 			&.right {
 				float: right;
 			}
+
+			i {
+				vertical-align: middle;
+				display: inline-block;
+			}
+			.label{
+				vertical-align: middle;
+				display: inline-block;
+				color:#fff;
+				padding-top: 3px;
+				font-size:15px;
+				line-height: 21px;
+				height:21px;
+			}
+
+			/*
+			&.fadeOut{
+				@include animation(FADE_OUT 0.25s $ease-in-out-cubic);
+				@include opacity(0.0);
+			}
+			&.fadeIn{
+				@include opacity(1.0);
+			}
+			*/
 		}
 
 		@include aside-events();
@@ -237,27 +312,7 @@ html, body {
 			overflow-y: auto;
 			overflow-x: hidden;
 			-webkit-overflow-scrolling: touch;
-
-			&.slide-out-left {
-				@include animation(SLIDE_OUT_LEFT 0.25s $ease-in-out-cubic);
-				@include transform(translateZ(0));
-				@include transform(translateX(-100%));
-			}
-			&.slide-out-right {
-				@include animation(SLIDE_OUT_RIGHT 0.25s $ease-in-out-cubic);
-				@include transform(translateZ(0));
-				@include transform(translateX(100%));
-			}
-			&.slide-in-left {
-				@include animation(SLIDE_IN_LEFT 0.25s $ease-in-out-cubic);
-				@include transform(translateZ(0));
-				@include transform(translateX(0px));
-			}
-			&.slide-in-right {
-				@include animation(SLIDE_IN_RIGHT 0.25s $ease-in-out-cubic);
-				@include transform(translateZ(0));
-				@include transform(translateX(0px));
-			}
+			@include slide-events();
 		}
 		@include aside-events();
 	}

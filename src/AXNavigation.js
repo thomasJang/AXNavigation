@@ -411,7 +411,7 @@ var AXNavigation = (function() {
 			}
 		};
 
-		this.close = function(form) {
+		this.close = function() {
 			if (this.animating) return this;
 			if (this.active_content_main == "") return this;
 			this.animating = true;
@@ -423,7 +423,7 @@ var AXNavigation = (function() {
 			//this.content_stack[this.content_stack.length - 2].jdom.show().removeClass("slide-out-left").addClass("slide-in-left");
 			content_root[content_root.length - 2].jdom.removeClass("slide-out-left").addClass("slide-in-left");
 			content_root[content_root.length - 1].jdom.removeClass("slide-in-right").addClass("slide-out-right");
-			if (form.header) {
+			if (_form.header) {
 				content_root[content_root.length - 2].header_jdom.removeClass("slide-out-left").addClass("slide-in-left");
 				content_root[content_root.length - 1].header_jdom.removeClass("slide-in-right").addClass("slide-out-right");
 			}
@@ -431,14 +431,14 @@ var AXNavigation = (function() {
 			setTimeout((function() {
 				content_root[content_root.length - 2].jdom.removeClass("slide-in-left");
 				content_root[content_root.length - 1].jdom.remove();
-				if (form.header) {
+				if (_form.header) {
 					content_root[content_root.length - 2].header_jdom.removeClass("slide-in-left");
 					content_root[content_root.length - 1].header_jdom.remove();
 				}
 				content_root.pop();
 
-				if (window[form.objectName]) {
-					delete window[form.objectName];
+				if (window[_form.objectName]) {
+					delete window[_form.objectName];
 				}
 				this.animating = false;
 			}).bind(this), cfg.animateTime);
@@ -448,7 +448,6 @@ var AXNavigation = (function() {
 		this.remove_tree = function(names) {
 			for (var ii = 0, ll = names.length; ii < ll; ii++) {
 				var content_root = this.content_tree[names[ii]];
-				console.log(content_root);
 				if (content_root) {
 					for (var i = 0, l = content_root.length; i < l; i++) {
 						content_root[i].jdom.remove();
@@ -467,7 +466,7 @@ var AXNavigation = (function() {
 			_this.animating = true;
 
 			var content_root = this.content_tree[this.active_content_main];
-			var content = content_root[content_root - 1].jdom;
+			var content = content_root[content_root.length - 1].jdom;
 			content.css({"-webkit-overflow-scrolling": "none", "overflow": "hidden"});
 			content.stop().animate({scrollTop: top}, cfg.animateTime, 'swing', function() {
 				_this.animating = false;
